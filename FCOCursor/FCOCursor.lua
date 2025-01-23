@@ -26,41 +26,31 @@ FCOC.ctrlVars = {
 
 --Saved original cursor data
 local origZOsCursors = {
-    default = MOUSE_CURSOR_DEFAULT_CURSOR,-- = 0
-    resizeEW = MOUSE_CURSOR_RESIZE_EW,-- = 1
-    resizeNS = MOUSE_CURSOR_RESIZE_NS,-- = 2
-    resizeNESW = MOUSE_CURSOR_RESIZE_NESW,-- = 3
-    resizeNWSE = MOUSE_CURSOR_RESIZE_NWSE,-- = 4
-    icon = MOUSE_CURSOR_ICON,-- = 5
-    uiHand = MOUSE_CURSOR_UI_HAND,-- = 6
-    erase = MOUSE_CURSOR_ERASE,-- = 7
-    fill = MOUSE_CURSOR_FILL,-- = 8
-    fillMultiple = MOUSE_CURSOR_FILL_MULTIPLE,-- = 9
-    paint = MOUSE_CURSOR_PAINT,-- = 10
-    sample = MOUSE_CURSOR_SAMPLE,-- = 11
-    pan = MOUSE_CURSOR_PAN,-- = 12
-    rotate = MOUSE_CURSOR_ROTATE,-- = 13
-    nextLeft = MOUSE_CURSOR_NEXT_LEFT,-- = 14
-    nextRight = MOUSE_CURSOR_NEXT_RIGHT,-- = 15
-    preview = MOUSE_CURSOR_PREVIEW,-- = 16
-    championWorldStar = MOUSE_CURSOR_CHAMPION_WORLD_STAR,-- = 17
-    championCombatStar = MOUSE_CURSOR_CHAMPION_COMBAT_STAR,-- = 18
-    championConditioningStar = MOUSE_CURSOR_CHAMPION_CONDITIONING_STAR,-- = 19
-    doNotCare = MOUSE_CURSOR_DO_NOT_CARE,-- = 666
+    default =                   { name="MOUSE_CURSOR_DEFAULT_CURSOR", value=MOUSE_CURSOR_DEFAULT_CURSOR },--MOUSE_CURSOR_DEFAULT_CURSOR = 0
+    resizeEW =                  { name="MOUSE_CURSOR_RESIZE_EW", value=MOUSE_CURSOR_RESIZE_EW },--MOUSE_CURSOR_RESIZE_EW,-- = 1
+    resizeNS =                  { name="MOUSE_CURSOR_RESIZE_NS", value=MOUSE_CURSOR_RESIZE_NS },--MOUSE_CURSOR_RESIZE_NS,-- = 2
+    resizeNESW =                { name="MOUSE_CURSOR_RESIZE_NESW", value=MOUSE_CURSOR_RESIZE_NESW },--MOUSE_CURSOR_RESIZE_NESW,-- = 3
+    resizeNWSE =                { name="MOUSE_CURSOR_RESIZE_NWSE", value=MOUSE_CURSOR_RESIZE_NWSE },--MOUSE_CURSOR_RESIZE_NWSE,-- = 4
+    icon =                      { name="MOUSE_CURSOR_ICON", value=MOUSE_CURSOR_ICON },--MOUSE_CURSOR_ICON,-- = 5
+    uiHand =                    { name="MOUSE_CURSOR_UI_HAND", value=MOUSE_CURSOR_UI_HAND },--MOUSE_CURSOR_UI_HAND,-- = 6
+    erase =                     { name="MOUSE_CURSOR_ERASE", value=MOUSE_CURSOR_ERASE },--MOUSE_CURSOR_ERASE,-- = 7
+    fill =                      { name="MOUSE_CURSOR_FILL", value=MOUSE_CURSOR_FILL },--MOUSE_CURSOR_FILL,-- = 8
+    fillMultiple =              { name="MOUSE_CURSOR_FILL_MULTIPLE", value=MOUSE_CURSOR_FILL_MULTIPLE },--MOUSE_CURSOR_FILL_MULTIPLE,-- = 9
+    paint =                     { name="MOUSE_CURSOR_PAINT", value=MOUSE_CURSOR_PAINT },--MOUSE_CURSOR_PAINT,-- = 10
+    sample =                    { name="MOUSE_CURSOR_SAMPLE", value=MOUSE_CURSOR_SAMPLE },--MOUSE_CURSOR_SAMPLE,-- = 11
+    pan =                       { name="MOUSE_CURSOR_PAN", value=MOUSE_CURSOR_PAN },--MOUSE_CURSOR_PAN,-- = 12
+    rotate =                    { name="MOUSE_CURSOR_ROTATE", value=MOUSE_CURSOR_ROTATE },--MOUSE_CURSOR_ROTATE,-- = 13
+    nextLeft =                  { name="MOUSE_CURSOR_NEXT_LEFT", value=MOUSE_CURSOR_NEXT_LEFT },--MOUSE_CURSOR_NEXT_LEFT,-- = 14
+    nextRight =                 { name="MOUSE_CURSOR_NEXT_RIGHT", value=MOUSE_CURSOR_NEXT_RIGHT },--MOUSE_CURSOR_NEXT_RIGHT,-- = 15
+    preview =                   { name="MOUSE_CURSOR_PREVIEW", value=MOUSE_CURSOR_PREVIEW },--MOUSE_CURSOR_PREVIEW,-- = 16
+    championWorldStar =         { name="MOUSE_CURSOR_CHAMPION_WORLD_STAR", value=MOUSE_CURSOR_CHAMPION_WORLD_STAR },--MOUSE_CURSOR_CHAMPION_WORLD_STAR,-- = 17
+    championCombatStar =        { name="MOUSE_CURSOR_CHAMPION_COMBAT_STAR", value=MOUSE_CURSOR_CHAMPION_COMBAT_STAR },--MOUSE_CURSOR_CHAMPION_COMBAT_STAR,-- = 18
+    championConditioningStar =  { name="MOUSE_CURSOR_CHAMPION_CONDITIONING_STAR", value=MOUSE_CURSOR_CHAMPION_CONDITIONING_STAR },--MOUSE_CURSOR_CHAMPION_CONDITIONING_STAR,-- = 19
+    doNotCare =                 { name="MOUSE_CURSOR_DO_NOT_CARE", value=MOUSE_CURSOR_DO_NOT_CARE },--MOUSE_CURSOR_DO_NOT_CARE,-- = 666
 }
 
-local savedOrigCursors = {}
-for k, v in pairs(origZOsCursors) do
-    local savedOrigZOsCursor = v
-    savedOrigCursors[k] = savedOrigZOsCursor
-end
+local savedOrigCursors = ZO_ShallowTableCopy(origZOsCursors)
 FCOC.origCursors = savedOrigCursors
-
-
---Change this to another cursor if you want to have the default cursor replaced by any other
--->If your chose one is not exisitng it will reset to the original default cursor instead
-local newCursorForDefault = MOUSE_CURSOR_CHAMPION_CONDITIONING_STAR
-
 
 --local variables
 local isExchangeCursorsLooping = false
@@ -71,10 +61,7 @@ local svName = "FCOCursor_Settings"
 FCOC.settingsVars = {
     defaults = {
         exchangeCursors = {
-            default = true,
-        },
-        exchangedCursors = {
-            default = newCursorForDefault
+            default = "default",
         },
         cursorGlow = false,
         cursorGlowColor = {r=0.3, g=0.3, b=0.3, a=0.4}
@@ -84,19 +71,27 @@ FCOC.settingsVars = {
 
 local function getCursorsList()
     local cursorsSorted = {}
-    for cursorName, _ in pairs(origZOsCursors) do
-        cursorsSorted[#cursorsSorted + 1] = cursorName
+    for cursorType, _ in pairs(savedOrigCursors) do
+        cursorsSorted[#cursorsSorted + 1] = cursorType
     end
     table.sort(cursorsSorted)
 
     local choices = {}
     local choicesValues = {}
-    for idx, cursorType in pairs(cursorsSorted) do
-        local cursorName = GetString(lamStringCursorTypePrefix, cursorType)
-        choices[idx] = cursorName
-        local cursor = origZOsCursors[cursorName]
-        choicesValues[idx] = cursor
+    for idx, cursorType in ipairs(cursorsSorted) do
+        local cursorName = GetString(lamStringCursorTypePrefix .. tostring(cursorType))
+        local cursorConstantData = savedOrigCursors[cursorType]
+        if cursorName ~= nil and cursorConstantData ~= nil and cursorConstantData.value ~= nil then
+            choices[idx] = cursorName
+            choicesValues[idx] = cursorConstantData.value
+        end
     end
+
+FCOC._debug = {
+    cursorsSorted = cursorsSorted,
+    choices = choices,
+    choicesValues = choicesValues,
+}
 
     return choices, choicesValues
 end
@@ -112,23 +107,27 @@ local function updateVisualCursorNow(cursorToReplace)
 end
 
 local function updateDefaultCursorVisualNow()
-    local defaultCursor = origZOsCursors["default"]
+    local defaultCursor = savedOrigCursors.default.value
     updateVisualCursorNow(defaultCursor)
 end
 
 local function replaceCursor(cursorType, newCursor)
     if cursorType == nil then return end
-    local cursorToReplace = origZOsCursors[cursorType] --returns e.g. MOUSE_CURSOR_DEFAULT_CURSOR
-    if cursorToReplace ~= nil then
-        if newCursor == nil then
-            cursorToReplace = savedOrigCursors[cursorType]
-        else
-            cursorToReplace = newCursor
+    local cursorDataToReplace = savedOrigCursors[cursorType] --returns e.g. { name="MOUSE_CURSOR_DEFAULT_CURSOR", value=MOUSE_CURSOR_DEFAULT_CURSOR }
+    local currentCursor
+    if cursorDataToReplace ~= nil then
+        currentCursor = _G[cursorDataToReplace.name]
+        if currentCursor ~= nil then
+            if newCursor == nil then
+                currentCursor = cursorDataToReplace.value
+            else
+                currentCursor = newCursor
+            end
+
+            if isExchangeCursorsLooping then return end
+            updateVisualCursorNow(currentCursor)
         end
     end
-
-    if isExchangeCursorsLooping then return end
-    updateVisualCursorNow(cursorToReplace)
 end
 
 local exchangeCursors
@@ -194,12 +193,13 @@ local function BuildAddonMenu()
                 tooltip = GetString(FCOCURSOR_LAM_EXCHANGE_DEFAULT_CURSOR_TT),
                 choices = cursorsDropdownChoices,
                 choicesValues = cursorsDropdownChoicesValues,
-                getFunc = function () return self.savedVars.cursor end,
+                getFunc = function () return settings.exchangeCursors["default"] end,
                 setFunc = function (value)
-                    FCOC.settingsVars.settings.exchangeCursors["default"] = value
+                    settings.exchangeCursors["default"] = value
                     exchangeCursors("default", value)
                 end,
                 width = "full",
+                default = defSettings.exchangeCursors["default"],
             }
 
             --[[
@@ -215,7 +215,7 @@ local function BuildAddonMenu()
                 tooltip = GetString(FCOCURSOR_LAM_CURSOR_GLOW_TT),
                 getFunc = function() return settings.cursorGlow end,
                 setFunc = function(value)
-                    FCOC.settingsVars.settings.cursorGlow = value
+                    settings.cursorGlow = value
                 end,
                 default = defSettings.cursorGlow,
             },
@@ -247,6 +247,10 @@ end
 
 local function LoadSavedVariables()
     FCOC.settingsVars.settings = ZO_SavedVars:NewCharacterIdSettings(svName, svVersion, GetWorldName(), FCOC.settingsVars.defaults, nil)
+
+    if type(FCOC.settingsVars.settings.exchangeCursors.default) ~= "string" then
+        FCOC.settingsVars.settings.exchangeCursors.default = FCOC.settingsVars.defaults.exchangeCursors.default
+    end
 end
 
 --Events
