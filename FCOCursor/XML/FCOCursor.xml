@@ -1,0 +1,15 @@
+<GuiXml xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="http://sir.insidi.at/or/schema/esoui.xsd">
+
+    <Controls>
+		<!-- Frame/Window - Standard UI with border -->
+		<TopLevelControl name="FCOCursorTLC" mouseEnabled="false" movable="false" clampedToScreen="false" hidden="true" tier="HIGH" layer="" level="999">
+			<Dimensions x="32" y="32" />
+			<DimensionConstraints minX="10" minY="10" />
+			<Anchor point="CENTER" relativeTo="GuiMouse" relativePoint="CENTER" offsetX="0" offsetY="0"/>
+
+			<Controls>
+			</Controls>
+		</TopLevelControl>
+
+	</Controls>
+</GuiXml>

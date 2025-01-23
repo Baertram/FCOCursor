@@ -1,14 +1,20 @@
 ## Title: |c00FF00FCO |cFFFF00Cursor|r
 ## Author: Baertram
-## Version: 1
-## AddOnVersion: 000100
+## Version: 2
+## AddOnVersion: 000200
 ## APIVersion: 101040 101041
 ## Description: Change cursor related stuff
 ## SavedVariables: FCOCursor_Settings
 ## DependsOn: LibAddonMenu-2.0>=35
 
+
+## Translations
+lang/en.lua
+lang/$(language).lua
+
 ## Main addon
 FCOCursor.lua
+XML/FCOCursor.xml
 
 
 ; DISCLOSURE:
