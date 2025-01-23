@@ -372,6 +372,8 @@ end
 --XML Initialization
 function FCOC.InitCursorXML()
     local FCOC_UITLC = FCOCursorTLC
+    FCOC_UITLC:SetHidden(true)
+
     --FCOC_UITLC.GlowLabel = GetControl(FCOC.UITLC, "GlowLabel")
     FCOC_UITLC.GlowBackdrop = GetControl(FCOC_UITLC, "GlowBackdrop")
     FCOC.UITLC = FCOC_UITLC
@@ -379,7 +381,14 @@ function FCOC.InitCursorXML()
     --Switching between UI mdoe and non UI mode (pressing . to show cursor) should hide the TLC properly
     SecurePostHook(SCENE_MANAGER, 'SetInUIMode', function(selfVar, inUIMode, bypassHideSceneConfirmationReason)
 --d("[FCOCursor]SCENE_MANAGER:SetInUIMode-inUIMode: " ..tostring(inUIMode))
-        FCOC_UITLC:SetHidden(not inUIMode)
+        local settings = FCOC.settingsVars.settings
+        --Show/Hide the cursor glow
+        local doCursorGlow = settings.cursorGlow
+        local doHide = not doCursorGlow
+        if not doHide then
+            doHide = not inUIMode
+        end
+        FCOC_UITLC:SetHidden(doHide)
 	end)
 end
 
