@@ -79,7 +79,7 @@ local function getCursorsList()
     local choices = {}
     local choicesValues = {}
     for idx, cursorType in ipairs(cursorsSorted) do
-        local cursorName = GetString(lamStringCursorTypePrefix .. tostring(cursorType))
+        local cursorName = GetString(_G[lamStringCursorTypePrefix .. tostring(cursorType)])
         local cursorConstantData = savedOrigCursors[cursorType]
         if cursorName ~= nil and cursorConstantData ~= nil and cursorConstantData.value ~= nil then
             choices[idx] = cursorName
