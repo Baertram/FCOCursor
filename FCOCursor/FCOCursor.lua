@@ -17,6 +17,7 @@ local FCOC                = FCOCursor
 --Libraries
 FCOC.LAM = LibAddonMenu2
 
+local lamStringCursorTypePrefix = "FCOCURSOR_LAM_CURSOR_TYPE_"
 
 --ZOs controls
 FCOC.ctrlVars = {
@@ -60,9 +61,6 @@ FCOC.origCursors = savedOrigCursors
 -->If your chose one is not exisitng it will reset to the original default cursor instead
 local newCursorForDefault = MOUSE_CURSOR_CHAMPION_CONDITIONING_STAR
 
---The actual cursor chosen
-local newCursor = nil
-
 
 --local variables
 local isExchangeCursorsLooping = false
@@ -93,7 +91,8 @@ local function getCursorsList()
 
     local choices = {}
     local choicesValues = {}
-    for idx, cursorName in pairs(cursorsSorted) do
+    for idx, cursorType in pairs(cursorsSorted) do
+        local cursorName = GetString(lamStringCursorTypePrefix, cursorType)
         choices[idx] = cursorName
         local cursor = origZOsCursors[cursorName]
         choicesValues[idx] = cursor
@@ -103,12 +102,18 @@ local function getCursorsList()
 end
 
 --functions
-local function updateVisualCursorNow()
+local function updateVisualCursorNow(cursorToReplace)
+    if cursorToReplace == nil then return end
     --Mouse cursor is not updating if just pressing key to get into UI mode.
     --You need to open the inventory e.g. to update it?
     --So we try to force the change of the cursor now
     ClearCursor()
-    WINDOW_MANAGER:SetMouseCursor(MOUSE_CURSOR_DEFAULT_CURSOR)
+    WINDOW_MANAGER:SetMouseCursor(cursorToReplace)
+end
+
+local function updateDefaultCursorVisualNow()
+    local defaultCursor = origZOsCursors["default"]
+    updateVisualCursorNow(defaultCursor)
 end
 
 local function replaceCursor(cursorType, newCursor)
@@ -123,7 +128,7 @@ local function replaceCursor(cursorType, newCursor)
     end
 
     if isExchangeCursorsLooping then return end
-    updateVisualCursorNow()
+    updateVisualCursorNow(cursorToReplace)
 end
 
 local exchangeCursors
@@ -137,7 +142,7 @@ function FCOC.ExchangeCursors(cursorType, newCursor)
             exchangeCursors(l_cursorType, l_newCursor)
         end
         isExchangeCursorsLooping = false
-        updateVisualCursorNow()
+        updateDefaultCursorVisualNow()
     else
         replaceCursor(cursorType, newCursor)
     end
