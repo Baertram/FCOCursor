@@ -65,6 +65,7 @@ FCOC.settingsVars = {
         },
         cursorGlow = false,
         cursorGlowColor = { r=0.3, g=0.3, b=0.3, a=0.4 },
+        cursorGlowColorEdge = { r=0.3, g=0.3, b=0.3, a=0.4 },
         cursorGlowSize = { x = 10, y = 10},
     },
     settings = {},
@@ -109,6 +110,7 @@ function FCOC.UpdateCursorGlow()
 
     --Update the color of the glow
     local cursorGlowColor = settings.cursorGlowColor
+    local cursorGlowColorEdge = settings.cursorGlowColorEdge
     local cursorGlowSize = settings.cursorGlowSize
     ---local glowLabel = cursorGlowTLC.GlowLabel
     --glowLabel:SetText(settings.cursorGlowText)
@@ -119,6 +121,7 @@ function FCOC.UpdateCursorGlow()
     glowBackdrop:SetAnchor(CENTER, cursorGlowTLC, CENTER, 0, 0)
     glowBackdrop:SetDimensions(cursorGlowSize.x, cursorGlowSize.y)
     glowBackdrop:SetCenterColor(cursorGlowColor.r, cursorGlowColor.g, cursorGlowColor.b, cursorGlowColor.a)
+    glowBackdrop:SetEdgeColor(cursorGlowColorEdge.r, cursorGlowColorEdge.g, cursorGlowColorEdge.b, cursorGlowColorEdge.a)
 end
 local updateCursorGlow = FCOC.UpdateCursorGlow
 
@@ -263,7 +266,26 @@ local function BuildAddonMenu()
 
                     updateCursorGlow()
                 end,
-                efault = defSettings.cursorGlowColor,
+                default = defSettings.cursorGlowColor,
+                disabled = function() return not settings.cursorGlow end,
+            },
+            {
+                type = "colorpicker",
+                name = GetString(FCOCURSOR_LAM_CURSOR_GLOW_COLOR_EDGE),
+                tooltip = GetString(FCOCURSOR_LAM_CURSOR_GLOW_COLOR_EDGE_TT),
+                getFunc = function()
+                    local cursorGlowColorEdge = settings.cursorGlowColorEdge
+                    return cursorGlowColorEdge["r"], cursorGlowColorEdge["g"], cursorGlowColorEdge["b"], cursorGlowColorEdge["a"]
+                end,
+                setFunc = function(r,g,b,a)
+                    settings.cursorGlowColorEdge["r"] = r
+                    settings.cursorGlowColorEdge["g"] = g
+                    settings.cursorGlowColorEdge["b"] = b
+                    settings.cursorGlowColorEdge["a"] = a
+
+                    updateCursorGlow()
+                end,
+                default = defSettings.cursorGlowColorEdge,
                 disabled = function() return not settings.cursorGlow end,
             },
             {
@@ -273,6 +295,8 @@ local function BuildAddonMenu()
                 min = 0.1,
                 max = 32,
                 step = 0.1,
+                decimals = 1,
+                autoSelect = true,
                 getFunc = function() return settings.cursorGlowSize.x end,
                 setFunc = function(value)
                     settings.cursorGlowSize.x = value
@@ -289,6 +313,8 @@ local function BuildAddonMenu()
                 min = 0.1,
                 max = 32,
                 step = 0.1,
+                decimals = 1,
+                autoSelect = true,
                 getFunc = function() return settings.cursorGlowSize.y end,
                 setFunc = function(value)
                     settings.cursorGlowSize.y = value
