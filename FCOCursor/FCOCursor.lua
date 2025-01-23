@@ -60,6 +60,10 @@ FCOC.origCursors = savedOrigCursors
 -->If your chose one is not exisitng it will reset to the original default cursor instead
 local newCursorForDefault = MOUSE_CURSOR_CHAMPION_CONDITIONING_STAR
 
+--The actual cursor chosen
+local newCursor = nil
+
+
 --local variables
 local isExchangeCursorsLooping = false
 
@@ -80,6 +84,23 @@ FCOC.settingsVars = {
     settings = {},
 }
 
+local function getCursorsList()
+    local cursorsSorted = {}
+    for cursorName, _ in pairs(origZOsCursors) do
+        cursorsSorted[#cursorsSorted + 1] = cursorName
+    end
+    table.sort(cursorsSorted)
+
+    local choices = {}
+    local choicesValues = {}
+    for idx, cursorName in pairs(cursorsSorted) do
+        choices[idx] = cursorName
+        local cursor = origZOsCursors[cursorName]
+        choicesValues[idx] = cursor
+    end
+
+    return choices, choicesValues
+end
 
 --functions
 local function updateVisualCursorNow()
@@ -90,36 +111,35 @@ local function updateVisualCursorNow()
     WINDOW_MANAGER:SetMouseCursor(MOUSE_CURSOR_DEFAULT_CURSOR)
 end
 
-local function replaceCursor(cursorType, isEnabled)
+local function replaceCursor(cursorType, newCursor)
     if cursorType == nil then return end
-
-    if newCursor == nil then
-        MOUSE_CURSOR_DEFAULT_CURSOR = savedOrigCursors.default
-        MOUSE_CURSOR_DO_NOT_CARE = savedOrigCursors.doNotCare
-    else
-        --Replace the default cursor with another one
-        MOUSE_CURSOR_DEFAULT_CURSOR = newCursor
-        MOUSE_CURSOR_DO_NOT_CARE = newCursor
+    local cursorToReplace = origZOsCursors[cursorType] --returns e.g. MOUSE_CURSOR_DEFAULT_CURSOR
+    if cursorToReplace ~= nil then
+        if newCursor == nil then
+            cursorToReplace = savedOrigCursors[cursorType]
+        else
+            cursorToReplace = newCursor
+        end
     end
+
     if isExchangeCursorsLooping then return end
     updateVisualCursorNow()
 end
 
 local exchangeCursors
-function FCOC.ExchangeCursors(cursorType, isEnabled)
+function FCOC.ExchangeCursors(cursorType, newCursor)
     exchangeCursors = exchangeCursors or FCOC.ExchangeCursors
-    if cursorType == nil and isEnabled == nil  then
-        --Loop over all exchanged cursors and exchange them now
+    if cursorType == nil and newCursor == nil  then
+        --Loop over all exchanged cursors and set them to their exchanged value now
         local exchangeCursorsSettigs = FCOC.settingsVars.settings.exchangeCursors
         isExchangeCursorsLooping = true
-        for cursorType, isEnabled in pairs(exchangeCursorsSettigs) do
-            exchangeCursors(cursorType, isEnabled)
+        for l_cursorType, l_newCursor in pairs(exchangeCursorsSettigs) do
+            exchangeCursors(l_cursorType, l_newCursor)
         end
         isExchangeCursorsLooping = false
         updateVisualCursorNow()
     else
-        isEnabled = isEnabled or false
-        replaceCursor(cursorType, isEnabled)
+        replaceCursor(cursorType, newCursor)
     end
 end
 exchangeCursors = FCOC.ExchangeCursors
@@ -152,6 +172,9 @@ local function BuildAddonMenu()
         end
         ]]
 
+        local cursorsDropdownChoices, cursorsDropdownChoicesValues = getCursorsList()
+
+
         --the LAM settings controls
         local optionsTable = {
             --==============================================================================
@@ -161,16 +184,19 @@ local function BuildAddonMenu()
             },
             --==============================================================================
             {
-                type = "checkbox",
+                type = "dropdown",
                 name = GetString(FCOCURSOR_LAM_EXCHANGE_DEFAULT_CURSOR),
                 tooltip = GetString(FCOCURSOR_LAM_EXCHANGE_DEFAULT_CURSOR_TT),
-                getFunc = function() return settings.exchangeCursors["default"] end,
-                setFunc = function(value)
+                choices = cursorsDropdownChoices,
+                choicesValues = cursorsDropdownChoicesValues,
+                getFunc = function () return self.savedVars.cursor end,
+                setFunc = function (value)
                     FCOC.settingsVars.settings.exchangeCursors["default"] = value
                     exchangeCursors("default", value)
                 end,
-                default = defSettings.exchangeCursors["default"],
-            },
+                width = "full",
+            }
+
             --[[
             --==============================================================================
             {
