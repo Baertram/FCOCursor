@@ -8,6 +8,10 @@ local stringsDE = {
     FCOCURSOR_LAM_CURSOR_GLOW_TT             = "Zeigt einen glühenden Effekt um den Cursor herum an",
     FCOCURSOR_LAM_CURSOR_GLOW_COLOR          = "Glühen Farbe",
     FCOCURSOR_LAM_CURSOR_GLOW_COLOR_TT       = "Die Farbe für den Glühen Effekt",
+    FCOCURSOR_LAM_CURSOR_GLOW_SIZE_X =         "Glühen Größe X",
+    FCOCURSOR_LAM_CURSOR_GLOW_SIZE_X_TT =      "Die Größe des Glühen Effektes (Breite)",
+    FCOCURSOR_LAM_CURSOR_GLOW_SIZE_Y =         "Glühen Größe Y",
+    FCOCURSOR_LAM_CURSOR_GLOW_SIZE_Y_TT =      "Die Größe des Glühen Effektes (Höhe)",
 
     --Cursor types for the dropdown
     FCOCURSOR_LAM_CURSOR_TYPE_default = "Standard Cursor",

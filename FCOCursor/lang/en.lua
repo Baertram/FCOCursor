@@ -8,7 +8,11 @@ local stringsEN = {
     FCOCURSOR_LAM_CURSOR_GLOW_TT    =           "Show a glowing effect around the cursor",
     FCOCURSOR_LAM_CURSOR_GLOW_COLOR =           "Glow color",
     FCOCURSOR_LAM_CURSOR_GLOW_COLOR_TT  =       "The color for the glow",
-    
+    FCOCURSOR_LAM_CURSOR_GLOW_SIZE_X =          "Glow size X",
+    FCOCURSOR_LAM_CURSOR_GLOW_SIZE_X_TT =       "The size of the cursor glow (width)",
+    FCOCURSOR_LAM_CURSOR_GLOW_SIZE_Y =          "Glow size Y",
+    FCOCURSOR_LAM_CURSOR_GLOW_SIZE_Y_TT =       "The size of the cursor glow (height)",
+
     --Cursor types for the dropdown
     FCOCURSOR_LAM_CURSOR_TYPE_default = "Default cursor",
     FCOCURSOR_LAM_CURSOR_TYPE_resizeEW = "East-West Resize",

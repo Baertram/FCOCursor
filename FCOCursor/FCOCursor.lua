@@ -64,7 +64,8 @@ FCOC.settingsVars = {
             default = savedOrigCursors.default.value,
         },
         cursorGlow = false,
-        cursorGlowColor = {r=0.3, g=0.3, b=0.3, a=0.4}
+        cursorGlowColor = { r=0.3, g=0.3, b=0.3, a=0.4 },
+        cursorGlowSize = { x = 10, y = 10},
     },
     settings = {},
 }
@@ -97,6 +98,30 @@ FCOC._debug = {
     return choices, choicesValues
 end
 
+function FCOC.UpdateCursorGlow()
+    local settings = FCOC.settingsVars.settings
+
+    --Show/Hide the cursor glow
+    local doCursorGlow = settings.cursorGlow
+    local cursorGlowTLC = FCOC.UITLC
+    cursorGlowTLC:SetHidden(not doCursorGlow)
+    if doCursorGlow == false then return end
+
+    --Update the color of the glow
+    local cursorGlowColor = settings.cursorGlowColor
+    local cursorGlowSize = settings.cursorGlowSize
+    ---local glowLabel = cursorGlowTLC.GlowLabel
+    --glowLabel:SetText(settings.cursorGlowText)
+    --glowLabel:SetColor(cursorGlowColor.r, cursorGlowColor.g, cursorGlowColor.b, cursorGlowColor.a)
+
+    local glowBackdrop = cursorGlowTLC.GlowBackdrop
+    glowBackdrop:ClearAnchors()
+    glowBackdrop:SetAnchor(CENTER, cursorGlowTLC, CENTER, 0, 0)
+    glowBackdrop:SetDimensions(cursorGlowSize.x, cursorGlowSize.y)
+    glowBackdrop:SetCenterColor(cursorGlowColor.r, cursorGlowColor.g, cursorGlowColor.b, cursorGlowColor.a)
+end
+local updateCursorGlow = FCOC.UpdateCursorGlow
+
 --functions
 local function updateVisualCursorNow(cursorToReplace)
     if cursorToReplace == nil then return end
@@ -105,6 +130,7 @@ local function updateVisualCursorNow(cursorToReplace)
     --So we try to force the change of the cursor now
     ClearCursor()
     WINDOW_MANAGER:SetMouseCursor(cursorToReplace)
+    updateCursorGlow()
 end
 
 local function updateDefaultCursorVisualNow()
@@ -201,9 +227,8 @@ local function BuildAddonMenu()
                 end,
                 width = "full",
                 default = defSettings.exchangeCursors["default"],
-            }
+            },
 
-            --[[
             --==============================================================================
             {
                 type = 'header',
@@ -217,6 +242,8 @@ local function BuildAddonMenu()
                 getFunc = function() return settings.cursorGlow end,
                 setFunc = function(value)
                     settings.cursorGlow = value
+
+                    updateCursorGlow()
                 end,
                 default = defSettings.cursorGlow,
             },
@@ -229,16 +256,48 @@ local function BuildAddonMenu()
                     return cursorGlowColor["r"], cursorGlowColor["g"], cursorGlowColor["b"], cursorGlowColor["a"]
                 end,
                 setFunc = function(r,g,b,a)
-                    local cursorGlowColor = FCOC.settingsVars.settings.cursorGlowColor
-                    cursorGlowColor["r"] = r
-                    cursorGlowColor["g"] = g
-                    cursorGlowColor["b"] = b
-                    cursorGlowColor["a"] = a
+                    settings.cursorGlowColor["r"] = r
+                    settings.cursorGlowColor["g"] = g
+                    settings.cursorGlowColor["b"] = b
+                    settings.cursorGlowColor["a"] = a
+
+                    updateCursorGlow()
                 end,
                 efault = defSettings.cursorGlowColor,
                 disabled = function() return not settings.cursorGlow end,
             },
-            ]]
+            {
+                type = "slider",
+                name = GetString(FCOCURSOR_LAM_CURSOR_GLOW_SIZE_X),
+                tooltip = GetString(FCOCURSOR_LAM_CURSOR_GLOW_SIZE_X_TT),
+                min = 0.1,
+                max = 32,
+                step = 0.1,
+                getFunc = function() return settings.cursorGlowSize.x end,
+                setFunc = function(value)
+                    settings.cursorGlowSize.x = value
+
+                    updateCursorGlow()
+                end,
+                default = defSettings.cursorGlowSize.x,
+                disabled = function() return not settings.cursorGlow end,
+            },
+            {
+                type = "slider",
+                name = GetString(FCOCURSOR_LAM_CURSOR_GLOW_SIZE_Y),
+                tooltip = GetString(FCOCURSOR_LAM_CURSOR_GLOW_SIZE_Y_TT),
+                min = 0.1,
+                max = 32,
+                step = 0.1,
+                getFunc = function() return settings.cursorGlowSize.y end,
+                setFunc = function(value)
+                    settings.cursorGlowSize.y = value
+
+                    updateCursorGlow()
+                end,
+                default = defSettings.cursorGlowSize.y,
+                disabled = function() return not settings.cursorGlow end,
+            },
 
         }
 
@@ -277,6 +336,8 @@ end
 --XML Initialization
 function FCOC.InitCursorXML()
     FCOC.UITLC = FCOCursorTLC
+    --FCOC.UITLC.GlowLabel = GetControl(FCOC.UITLC, "GlowLabel")
+    FCOC.UITLC.GlowBackdrop = GetControl(FCOC.UITLC, "GlowBackdrop")
 end
 
 --Load the addon
