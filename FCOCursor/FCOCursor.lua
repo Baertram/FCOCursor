@@ -61,7 +61,7 @@ local svName = "FCOCursor_Settings"
 FCOC.settingsVars = {
     defaults = {
         exchangeCursors = {
-            default = "default",
+            default = savedOrigCursors.default.value,
         },
         cursorGlow = false,
         cursorGlowColor = {r=0.3, g=0.3, b=0.3, a=0.4}
@@ -86,12 +86,13 @@ local function getCursorsList()
             choicesValues[idx] = cursorConstantData.value
         end
     end
-
+--[[
 FCOC._debug = {
     cursorsSorted = cursorsSorted,
     choices = choices,
     choicesValues = choicesValues,
 }
+]]
 
     return choices, choicesValues
 end
@@ -114,10 +115,10 @@ end
 local function replaceCursor(cursorType, newCursor)
     if cursorType == nil then return end
     local cursorDataToReplace = savedOrigCursors[cursorType] --returns e.g. { name="MOUSE_CURSOR_DEFAULT_CURSOR", value=MOUSE_CURSOR_DEFAULT_CURSOR }
-    local currentCursor
     if cursorDataToReplace ~= nil then
-        currentCursor = _G[cursorDataToReplace.name]
+        local currentCursor = _G[cursorDataToReplace.name]
         if currentCursor ~= nil then
+--d(">found _G[" ..tostring(cursorDataToReplace.name) .."] -> Assign new cursor: " .. tostring(newCursor or cursorDataToReplace.value))
             if newCursor == nil then
                 currentCursor = cursorDataToReplace.value
             else
@@ -248,7 +249,7 @@ end
 local function LoadSavedVariables()
     FCOC.settingsVars.settings = ZO_SavedVars:NewCharacterIdSettings(svName, svVersion, GetWorldName(), FCOC.settingsVars.defaults, nil)
 
-    if type(FCOC.settingsVars.settings.exchangeCursors.default) ~= "string" then
+    if type(FCOC.settingsVars.settings.exchangeCursors.default) ~= "number" then
         FCOC.settingsVars.settings.exchangeCursors.default = FCOC.settingsVars.defaults.exchangeCursors.default
     end
 end
@@ -263,9 +264,10 @@ function FCOC.OnAddOnLoaded(event, addonName)
     if addonName ~= FCOC.name then return end
     EVENT_MANAGER:UnregisterForEvent(FCOC.name, EVENT_ADD_ON_LOADED)
 
+    LoadSavedVariables()
+
     FCOC.InitCursorXML()
 
-    LoadSavedVariables()
     BuildAddonMenu()
 
     EVENT_MANAGER:RegisterForEvent(FCOC.name, EVENT_PLAYER_ACTIVATED, FCOC.OnPlayerActivated)

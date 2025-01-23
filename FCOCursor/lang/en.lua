@@ -2,7 +2,7 @@ local stringsEN = {
     --LAM settings
     FCOCURSOR_LAM_HEADER_EXCHANGE_CURSOR    =   "Exchange cursors",
     FCOCURSOR_LAM_EXCHANGE_DEFAULT_CURSOR   =   "Exchange the default cursor",
-    FCOCURSOR_LAM_EXCHANGE_DEFAULT_CURSOR_TT =  "Exchange the default cursor with the Champion Star (red) cursor -> Better visibility",
+    FCOCURSOR_LAM_EXCHANGE_DEFAULT_CURSOR_TT =  "Exchange the default cursor with another cursor",
     FCOCURSOR_LAM_HEADER_CURSOR_VISUALS    =    "Visual cursor changes",
     FCOCURSOR_LAM_CURSOR_GLOW    =              "Glow around the cursor",
     FCOCURSOR_LAM_CURSOR_GLOW_TT    =           "Show a glowing effect around the cursor",
@@ -10,7 +10,7 @@ local stringsEN = {
     FCOCURSOR_LAM_CURSOR_GLOW_COLOR_TT  =       "The color for the glow",
     
     --Cursor types for the dropdown
-    FCOCURSOR_LAM_CURSOR_TYPE_default = "Default System Cursor",
+    FCOCURSOR_LAM_CURSOR_TYPE_default = "Default cursor",
     FCOCURSOR_LAM_CURSOR_TYPE_resizeEW = "East-West Resize",
     FCOCURSOR_LAM_CURSOR_TYPE_resizeNS = "North-South Resize",
     FCOCURSOR_LAM_CURSOR_TYPE_resizeNESW = "Northeast-Southwest Resize",

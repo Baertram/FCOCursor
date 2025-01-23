@@ -2,7 +2,7 @@ local stringsDE = {
     --LAM settings
     FCOCURSOR_LAM_HEADER_EXCHANGE_CURSOR     = "Cursor Austauch",
     FCOCURSOR_LAM_EXCHANGE_DEFAULT_CURSOR    = "Tausche Standard Cursor aus",
-    FCOCURSOR_LAM_EXCHANGE_DEFAULT_CURSOR_TT = "Tauscht den Standard Cursor gegen den Championpunkte Stern (rot) Cursor aus -> Bessere Sichtbarkeit",
+    FCOCURSOR_LAM_EXCHANGE_DEFAULT_CURSOR_TT = "Tauscht den Standard Cursor gegen einen anderen Cursor aus",
     FCOCURSOR_LAM_HEADER_CURSOR_VISUALS      = "Visuelle Cursor Veränderungen",
     FCOCURSOR_LAM_CURSOR_GLOW                = "Glühen um den Cursor",
     FCOCURSOR_LAM_CURSOR_GLOW_TT             = "Zeigt einen glühenden Effekt um den Cursor herum an",
@@ -10,7 +10,7 @@ local stringsDE = {
     FCOCURSOR_LAM_CURSOR_GLOW_COLOR_TT       = "Die Farbe für den Glühen Effekt",
 
     --Cursor types for the dropdown
-    FCOCURSOR_LAM_CURSOR_TYPE_default = "Default System Cursor",
+    FCOCURSOR_LAM_CURSOR_TYPE_default = "Standard Cursor",
     FCOCURSOR_LAM_CURSOR_TYPE_resizeEW = "East-West Resize",
     FCOCURSOR_LAM_CURSOR_TYPE_resizeNS = "North-South Resize",
     FCOCURSOR_LAM_CURSOR_TYPE_resizeNESW = "Northeast-Southwest Resize",
