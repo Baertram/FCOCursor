@@ -64,9 +64,9 @@ FCOC.settingsVars = {
             default = savedOrigCursors.default.value,
         },
         cursorGlow = false,
-        cursorGlowColor = { r=0.3, g=0.3, b=0.3, a=0.4 },
-        cursorGlowColorEdge = { r=0.3, g=0.3, b=0.3, a=0.4 },
-        cursorGlowSize = { x = 10, y = 10},
+        cursorGlowColor = { r=0, g=1, b=0.5, a=0.3 },
+        cursorGlowColorEdge = { r=0, g=1, b=0.5, a=0.4 },
+        cursorGlowSize = { x = 16, y = 16},
     },
     settings = {},
 }
@@ -137,25 +137,34 @@ local function updateVisualCursorNow(cursorToReplace)
 end
 
 local function updateDefaultCursorVisualNow()
-    local defaultCursor = savedOrigCursors.default.value
-    updateVisualCursorNow(defaultCursor)
+    updateVisualCursorNow(MOUSE_CURSOR_DEFAULT_CURSOR)
 end
 
 local function replaceCursor(cursorType, newCursor)
     if cursorType == nil then return end
     local cursorDataToReplace = savedOrigCursors[cursorType] --returns e.g. { name="MOUSE_CURSOR_DEFAULT_CURSOR", value=MOUSE_CURSOR_DEFAULT_CURSOR }
     if cursorDataToReplace ~= nil then
-        local currentCursor = _G[cursorDataToReplace.name]
+        local cursorName = cursorDataToReplace.name
+        local currentCursor = _G[cursorName]
         if currentCursor ~= nil then
 --d(">found _G[" ..tostring(cursorDataToReplace.name) .."] -> Assign new cursor: " .. tostring(newCursor or cursorDataToReplace.value))
             if newCursor == nil then
-                currentCursor = cursorDataToReplace.value
+                --Reset to the original one
+                --currentCursor = cursorDataToReplace.value
+                _G[cursorName] = cursorDataToReplace.value
             else
-                currentCursor = newCursor
+                --Overwrite with new selected
+                --currentCursor = newCursor
+                _G[cursorName] = newCursor
+            end
+            --Update the doNotCare cursor too if we update the default cursor
+            if cursorType == "default" then
+                local doNotCareCursorName = savedOrigCursors.doNotCare.name
+                _G[doNotCareCursorName] = _G[cursorName]
             end
 
             if isExchangeCursorsLooping then return end
-            updateVisualCursorNow(currentCursor)
+            updateVisualCursorNow(_G[cursorName])
         end
     end
 end
