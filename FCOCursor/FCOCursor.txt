@@ -2,10 +2,10 @@
 ## Author: Baertram
 ## Version: 2
 ## AddOnVersion: 000200
-## APIVersion: 101040 101041
+## APIVersion: 101044 101045
 ## Description: Change cursor related stuff
 ## SavedVariables: FCOCursor_Settings
-## DependsOn: LibAddonMenu-2.0>=35
+## DependsOn: LibAddonMenu-2.0>=37
 
 
 ## Translations
