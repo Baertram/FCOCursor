@@ -105,6 +105,7 @@ function FCOC.UpdateCursorGlow()
     --Show/Hide the cursor glow
     local doCursorGlow = settings.cursorGlow
     local cursorGlowTLC = FCOC.UITLC
+    cursorGlowTLC:SetMouseEnabled(false)
     cursorGlowTLC:SetHidden(not doCursorGlow)
     if doCursorGlow == false then return end
 
@@ -370,9 +371,16 @@ end
 
 --XML Initialization
 function FCOC.InitCursorXML()
-    FCOC.UITLC = FCOCursorTLC
-    --FCOC.UITLC.GlowLabel = GetControl(FCOC.UITLC, "GlowLabel")
-    FCOC.UITLC.GlowBackdrop = GetControl(FCOC.UITLC, "GlowBackdrop")
+    local FCOC_UITLC = FCOCursorTLC
+    --FCOC_UITLC.GlowLabel = GetControl(FCOC.UITLC, "GlowLabel")
+    FCOC_UITLC.GlowBackdrop = GetControl(FCOC_UITLC, "GlowBackdrop")
+    FCOC.UITLC = FCOC_UITLC
+
+    --Switching between UI mdoe and non UI mode (pressing . to show cursor) should hide the TLC properly
+    SecurePostHook(SCENE_MANAGER, 'SetInUIMode', function(selfVar, inUIMode, bypassHideSceneConfirmationReason)
+--d("[FCOCursor]SCENE_MANAGER:SetInUIMode-inUIMode: " ..tostring(inUIMode))
+        FCOC_UITLC:SetHidden(not inUIMode)
+	end)
 end
 
 --Load the addon
